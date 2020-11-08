@@ -1,8 +1,8 @@
-package ru.league.test_league.service;
+package ru.league.league.service;
 
 import org.springframework.stereotype.Service;
-import ru.league.test_league.models.Product;
-import ru.league.test_league.repository.ProductRepository;
+import ru.league.league.models.Product;
+import ru.league.league.repository.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;

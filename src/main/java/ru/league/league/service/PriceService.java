@@ -1,8 +1,8 @@
-package ru.league.test_league.service;
+package ru.league.league.service;
 
 import org.springframework.stereotype.Service;
-import ru.league.test_league.models.Price;
-import ru.league.test_league.repository.PriceRepository;
+import ru.league.league.models.Price;
+import ru.league.league.repository.PriceRepository;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,11 +24,11 @@ public class PriceService {
     }
 
     public List<Price> getByProductId(int id) {
-        return repository.getPricesByProduct_Id(id);
+        return repository.getPricesByProductId(id);
     }
 
     public Optional<Price> findById(Price price) {
-        return repository.findById(price.getPrice_id());
+        return repository.findById(price.getPriceId());
     }
 
     public Price save(Price price) {

@@ -1,4 +1,4 @@
-package ru.league.test_league.controller;
+package ru.league.league.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.league.test_league.models.Price;
-import ru.league.test_league.models.Product;
-import ru.league.test_league.models.Statistic;
-import ru.league.test_league.service.PriceService;
-import ru.league.test_league.service.ProductService;
+import ru.league.league.models.Price;
+import ru.league.league.models.Product;
+import ru.league.league.models.Statistic;
+import ru.league.league.service.PriceService;
+import ru.league.league.service.ProductService;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/products")
 public class ProductController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
-    private static final Comparator<Price> COMPARATOR = Comparator.comparing(Price::getPrice_date);
+    private static final Comparator<Price> COMPARATOR = Comparator.comparing(Price::getPriceDate);
 
     /**
      * path to .csv file
@@ -58,10 +58,7 @@ public class ProductController {
      */
     @GetMapping("/{data}")
     public synchronized ResponseEntity<Map<String, Integer>> findAllProductsWithActualPrice(@PathVariable("data") String data) {
-        final var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate requiredDate = LocalDate.parse(data, dtf);
-        LocalDateTime dateWithTime = LocalDateTime.of(requiredDate, LocalDateTime.now().toLocalTime());
-
+        var dateWithTime = getDateFromString(data);
         var products = productService.findAll().parallelStream().collect(Collectors.toList());
 
         final var mapResult = products.parallelStream()
@@ -69,9 +66,8 @@ public class ProductController {
                         .toMap(
                                 Product::getName,
                                 x -> x.getPrices().parallelStream()
-                                        .filter(o1 -> o1.getPrice_date().isBefore(dateWithTime))
-                        .max(COMPARATOR).get().getPrice()))
-                ;
+                                        .filter(o1 -> o1.getPriceDate().isBefore(dateWithTime))
+                        .max(COMPARATOR).get().getPrice()));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(mapResult);
@@ -93,7 +89,7 @@ public class ProductController {
                             var prices = product.getPrices();
                             var firstPrice = prices.parallelStream().min(COMPARATOR).get();
                             var lastPrice = prices.parallelStream().max(COMPARATOR).get();
-                            var resultDays = ChronoUnit.DAYS.between(firstPrice.getPrice_date(), lastPrice.getPrice_date()) + 1;
+                            var resultDays = ChronoUnit.DAYS.between(firstPrice.getPriceDate(), lastPrice.getPriceDate()) + 1;
                             var frequent = prices.size() / (double) resultDays;
                             return new Statistic(product.getName(), firstPrice.getPrice(), lastPrice.getPrice(), frequent);
                         }).get();
@@ -143,7 +139,6 @@ public class ProductController {
     private LocalDateTime getDateFromString(String date) {
         final var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateFromFile = LocalDate.parse(date, dtf);
-        LocalDateTime dateWithTime = LocalDateTime.of(dateFromFile, LocalDateTime.now().toLocalTime());
-        return dateWithTime;
+        return LocalDateTime.of(dateFromFile, LocalDateTime.now().toLocalTime());
     }
 }

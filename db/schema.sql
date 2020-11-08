@@ -9,9 +9,8 @@ create table if not exists products
 
 create table if not exists prices
 (
-    price_id     serial primary key,
-    price        int     not null,
-    price_date   date    not null default now(),
-    price_status boolean not null default true,
-    product_id   int references products (id)
-);
+    price_id   serial primary key,
+    price      int       not null,
+    price_date timestamp not null default now(),
+    product_id int references products (id)
+);;

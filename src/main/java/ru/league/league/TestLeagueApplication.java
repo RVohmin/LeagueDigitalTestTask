@@ -1,4 +1,4 @@
-package ru.league.test_league;
+package ru.league.league;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

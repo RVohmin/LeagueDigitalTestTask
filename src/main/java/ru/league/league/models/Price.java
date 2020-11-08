@@ -1,4 +1,4 @@
-package ru.league.test_league.models;
+package ru.league.league.models;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,28 +8,28 @@ import java.time.LocalDateTime;
 public class Price {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int price_id;
+    private int priceId;
     private int price;
-    private LocalDateTime price_date;
+    private LocalDateTime priceDate;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Price(int price_id, int price, LocalDateTime price_date) {
-        this.price_id = price_id;
+    public Price(int priceId, int price, LocalDateTime priceDate) {
+        this.priceId = priceId;
         this.price = price;
-        this.price_date = price_date;
+        this.priceDate = priceDate;
     }
 
     public Price() {
     }
 
-    public int getPrice_id() {
-        return price_id;
+    public int getPriceId() {
+        return priceId;
     }
 
-    public void setPrice_id(int price_id) {
-        this.price_id = price_id;
+    public void setPriceId(int priceId) {
+        this.priceId = priceId;
     }
 
     public int getPrice() {
@@ -40,12 +40,12 @@ public class Price {
         this.price = price;
     }
 
-    public LocalDateTime getPrice_date() {
-        return price_date;
+    public LocalDateTime getPriceDate() {
+        return priceDate;
     }
 
-    public void setPrice_date(LocalDateTime price_date) {
-        this.price_date = price_date;
+    public void setPriceDate(LocalDateTime priceDate) {
+        this.priceDate = priceDate;
     }
 
     public Product getProduct() {

@@ -1,13 +1,10 @@
-package ru.league.test_league.models;
+package ru.league.league.models;
 
 public class Statistic {
     private String productName;
     private int minPrice;
     private int maxPrice;
     private double frequentPriceChange;
-
-    public Statistic() {
-    }
 
     public Statistic(String productName, int minPrice, int maxPrice, double frequentPriceChange) {
         this.productName = productName;
