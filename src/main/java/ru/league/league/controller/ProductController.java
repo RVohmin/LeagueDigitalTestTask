@@ -78,7 +78,7 @@ public class ProductController {
      * @return List with Statistic objects
      */
     @GetMapping("/statistics")
-    public synchronized ResponseEntity<List<Statistic>> getStatistic() {
+    public ResponseEntity<List<Statistic>> getStatistic() {
         ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         var products = this.productService.findAll().parallelStream().collect(Collectors.toList());
 
@@ -103,7 +103,7 @@ public class ProductController {
     }
 
     @GetMapping("/upload")
-    public synchronized ResponseEntity<String> upload() {
+    public ResponseEntity<String> upload() {
         LOGGER.info("Starting upload from file at {}", LocalDateTime.now());
         String line = "";
         String cvsSplitBy = ";";
@@ -121,10 +121,8 @@ public class ProductController {
                 var tempProduct = productService.findById(newProduct).orElse(null);
                 if (tempProduct == null) {
                     productService.save(newProduct);
-                    priceService.save(newPrice);
-                } else {
-                    priceService.save(newPrice);
                 }
+                priceService.save(newPrice);
                 countProducts++;
             }
 
